@@ -2,7 +2,16 @@
 #include <cfloat>
 #include <vector>
 
-#include "thrust/device_vector.h"
+#if defined(__clang__) && defined(__CUDACC__)
+	#undef __CUDACC__
+	#pragma hd_warning_disable
+	#pragma nv_exec_check_disable
+	#include <thrust/detail/pointer.h>
+	#include <thrust/device_vector.h>
+	#define __CUDACC__
+#else 
+    #include <thrust/device_vector.h>
+#endif
 
 #include "caffe/layers/softmax_layer.hpp"
 #include "caffe/util/math_functions.hpp"

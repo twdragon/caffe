@@ -1,7 +1,16 @@
 #include <math_functions.h>  // CUDA's, not caffe's, for fabs, signbit
-#include <thrust/device_vector.h>
-#include <thrust/functional.h>  // thrust::plus
-#include <thrust/reduce.h>
+#if defined(__clang__) && defined(__CUDACC__)
+	#undef __CUDACC__
+	#pragma hd_warning_disable
+	#pragma nv_exec_check_disable
+	#include <thrust/detail/pointer.h>
+	#include <thrust/device_vector.h>
+	#include <thrust/functional.h>  // thrust::plus
+	#include <thrust/reduce.h>
+	#define __CUDACC__
+#else 
+    #include <thrust/device_vector.h>
+#endif
 
 #include <cmath>
 
